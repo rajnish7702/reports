@@ -66,24 +66,24 @@ public class ReportServiceImpl implements ReportService {
 		XSSFSheet sheet = workbook.createSheet();
 		XSSFRow headerRow = sheet.createRow(0);
 		headerRow.createCell(0).setCellValue("Id");
-		headerRow.createCell(0).setCellValue("Plain Name");
-		headerRow.createCell(0).setCellValue("Plain Staus");
-		headerRow.createCell(0).setCellValue("Citizen Name");
-		headerRow.createCell(0).setCellValue("Citizen Email");
-		headerRow.createCell(0).setCellValue("Gender");
-		headerRow.createCell(0).setCellValue("Phone");
-		headerRow.createCell(0).setCellValue("SSN");
+		headerRow.createCell(1).setCellValue("Plain Name");
+		headerRow.createCell(2).setCellValue("Plain Staus");
+		headerRow.createCell(3).setCellValue("Citizen Name");
+		headerRow.createCell(4).setCellValue("Citizen Email");
+		headerRow.createCell(5).setCellValue("Gender");
+		headerRow.createCell(6).setCellValue("Phone");
+		headerRow.createCell(7).setCellValue("SSN");
 		int DataRowInfo = 1;
 		for (CitizenPlan citizenPlan : reports) {
 			XSSFRow dataRow = sheet.createRow(DataRowInfo);
 			dataRow.createCell(0).setCellValue(citizenPlan.getCId());
 			dataRow.createCell(1).setCellValue(citizenPlan.getPlanName());
-			dataRow.createCell(3).setCellValue(citizenPlan.getPlanStatus());
-			dataRow.createCell(0).setCellValue(citizenPlan.getCName());
-			dataRow.createCell(1).setCellValue(citizenPlan.getCEmail());
-			dataRow.createCell(3).setCellValue(citizenPlan.getGender());
-			dataRow.createCell(1).setCellValue(citizenPlan.getPhone());
-			dataRow.createCell(3).setCellValue(citizenPlan.getSsn());
+			dataRow.createCell(2).setCellValue(citizenPlan.getPlanStatus());
+			dataRow.createCell(3).setCellValue(citizenPlan.getCName());
+			dataRow.createCell(4).setCellValue(citizenPlan.getCEmail());
+			dataRow.createCell(5).setCellValue(citizenPlan.getGender());
+			dataRow.createCell(6).setCellValue(citizenPlan.getPhone());
+			dataRow.createCell(7).setCellValue(citizenPlan.getSsn());
 			DataRowInfo++;
 		}
 		ServletOutputStream ops = response.getOutputStream();
@@ -105,41 +105,56 @@ public class ReportServiceImpl implements ReportService {
 		Paragraph p = new Paragraph("Citizen Plain Info", font);
 		p.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(p);
-		PdfPTable table = new PdfPTable(5);
+		
+		
+		PdfPTable table = new PdfPTable(8);
 		table.setWidthPercentage(100f);
-		table.setWidths(new float[] { 1.5f, 3.5f, 3.0f, 3.0f,  3.5f, 3.0f, 3.0f });
+		table.setWidths(new float[] { 1.5f, 3.0f, 3.5f, 3.0f,  5.0f, 3.0f, 2.0f,2.0f });
 		table.setSpacingBefore(10);
+		
+		// set Table Header 
 		PdfPCell cell = new PdfPCell();
 		cell.setBackgroundColor(Color.BLUE);
-		cell.setPadding(5);
+		cell.setPadding(8);
 		Font fHeader = FontFactory.getFont(FontFactory.HELVETICA);
 		fHeader.setColor(Color.WHITE);
+		
 		cell.setPhrase(new Phrase("ID", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("Plan Name", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("Plan Status", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("Name", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("Email", fHeader));
+		table.addCell(cell);
 		
 		cell.setPhrase(new Phrase("Gender", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("Phone", fHeader));
 		table.addCell(cell);
+		
 		cell.setPhrase(new Phrase("SSN", fHeader));
-		table.addCell(cell);        
+		table.addCell(cell);     
+		
+		// set Table Data 
+		
 		List<CitizenPlan> records = reportRepo.findAll();
 		for (CitizenPlan record : records) {
 			table.addCell(String.valueOf(record.getCId()));
-			table.addCell(record.getPlanName());
-			table.addCell(record.getPlanStatus());
-			table.addCell(record.getCName());
-			table.addCell(record.getCEmail());
-			table.addCell(record.getGender());
-			table.addCell(String.valueOf(record.getPhone()));
-			table.addCell(String.valueOf(record.getSsn()));			
+            table.addCell(record.getPlanName());
+            table.addCell(record.getPlanStatus());
+            table.addCell(record.getCName());
+            table.addCell(record.getCEmail());
+            table.addCell(record.getGender());
+            table.addCell(String.valueOf(record.getPhone()));
+            table.addCell(String.valueOf(record.getSsn()));
 		}
 		document.add(table);
 		document.close();

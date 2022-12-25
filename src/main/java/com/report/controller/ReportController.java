@@ -54,7 +54,7 @@ public class ReportController {
 		response.flushBuffer();
 	}
 	@GetMapping("/pdf")
-	public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+	public void exportPdf(HttpServletResponse response) throws DocumentException, IOException {
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
